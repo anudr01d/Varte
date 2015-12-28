@@ -18,12 +18,6 @@ import retrofit.http.Query;
  */
 
 public class ApiClient {
-
-    /**
-     * Creates a retrofit service from an arbitrary class (clazz)
-     * @param clazz Java interface of the retrofit service
-     * @return retrofit service with defined endpoint
-     */
     public static <T> T createRetrofitService(final Class<T> clazz) {
         Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("https://query.yahooapis.com")
@@ -35,20 +29,4 @@ public class ApiClient {
 
         return service;
     }
-
-//    private static ApiInterface apiInterface;
-//
-//    public static ApiInterface getApiInterface() {
-//        if (apiInterface == null) {
-//            Retrofit retrofit = new Retrofit.Builder()
-//                    .baseUrl("https://query.yahooapis.com")
-//                    .client(new OkHttpClient())
-//                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-//                    .addConverterFactory(GsonConverterFactory.create())
-//                    .build();
-//            apiInterface = retrofit.create(ApiInterface.class);
-//        }
-//
-//        return apiInterface;
-//    }
 }

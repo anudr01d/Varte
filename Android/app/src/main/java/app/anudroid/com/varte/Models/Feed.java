@@ -3,23 +3,39 @@ package app.anudroid.com.varte.Models;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Feed {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String xmlns;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String dc;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String sy;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String title;
+    @JsonIgnore
     private List<Link> link = new ArrayList<Link>();
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String subtitle;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String updated;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String updatePeriod;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String updateFrequency;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Info info;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String date;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String language;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Entry> entry = new ArrayList<Entry>();
 
     /**

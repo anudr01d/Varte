@@ -3,23 +3,39 @@ package app.anudroid.com.varte.Models;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Entry {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String title;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Link_ link;
+    @JsonIgnore
     private List<Category> category = new ArrayList<Category>();
+    @JsonIgnore
     private Author author;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String id;
+    @JsonIgnore
     private String updated;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String published;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Summary summary;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private CommentRss commentRss;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Comments comments;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private OrigLink origLink;
+    @JsonIgnore
     private String creator;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String date;
 
     /**

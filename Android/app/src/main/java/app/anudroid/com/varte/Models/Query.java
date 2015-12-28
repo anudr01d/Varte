@@ -1,15 +1,22 @@
 
 package app.anudroid.com.varte.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Query {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private int count;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String created;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String lang;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Meta meta;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Results results;
 
     /**

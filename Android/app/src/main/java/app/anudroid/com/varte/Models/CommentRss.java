@@ -1,12 +1,16 @@
 
 package app.anudroid.com.varte.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommentRss {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String wfw;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String content;
 
     /**

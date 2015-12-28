@@ -1,13 +1,18 @@
 
 package app.anudroid.com.varte.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Redirect {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String from;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String status;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String content;
 
     /**

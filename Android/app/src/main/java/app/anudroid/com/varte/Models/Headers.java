@@ -4,11 +4,14 @@ package app.anudroid.com.varte.Models;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Headers {
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Header> header = new ArrayList<Header>();
 
     /**
