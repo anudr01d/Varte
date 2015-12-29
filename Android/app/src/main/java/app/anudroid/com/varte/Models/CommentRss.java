@@ -5,13 +5,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import org.parceler.Parcel;
+
+@Parcel
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommentRss {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String wfw;
+     String wfw;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String content;
+     String content;
+
+    public CommentRss(){}
 
     /**
      * 

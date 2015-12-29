@@ -4,14 +4,20 @@ package app.anudroid.com.varte.Adapters;
  * Created by Anudeep on 22/12/15.
  */
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +27,7 @@ import app.anudroid.com.varte.Models.Feed;
 import app.anudroid.com.varte.Models.News;
 import app.anudroid.com.varte.R;
 import app.anudroid.com.varte.Utils.DividerItemDecoration;
+import app.anudroid.com.varte.Views.NewsDetail;
 
 public class ChannelsAdapter extends BaseAdapter {
     private static LayoutInflater inflater=null;
@@ -29,6 +36,7 @@ public class ChannelsAdapter extends BaseAdapter {
     private NewsAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     RecyclerView.ItemDecoration itemDecoration;
+    Feed feed;
 
     public ChannelsAdapter(Context activity, List<Feed> d) {
         mDataset = d;
@@ -69,7 +77,7 @@ public class ChannelsAdapter extends BaseAdapter {
         else {
             holder = (ViewHolder) vi.getTag();
             if(mDataset!=null) {
-                Feed feed = (Feed) mDataset.get(position);
+                feed = (Feed) mDataset.get(position);
                 if (feed != null) {
                     mAdapter = new NewsAdapter(feed.getEntry());
                     mLayoutManager = new LinearLayoutManager(parent.getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -79,6 +87,16 @@ public class ChannelsAdapter extends BaseAdapter {
                     holder.channelName.setText(feed.getTitle() != null ? feed.getTitle() : "Null");
                     holder.channel.setHasFixedSize(true);
                     //holder.channel.addItemDecoration(itemDecoration);
+
+                    ((NewsAdapter) mAdapter).setOnItemClickListener(new NewsAdapter.MyClickListener() {
+                        @Override
+                        public void onItemClick(int position, View v) {
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("News", Parcels.wrap(feed.getEntry().get(position)));
+                            v.getContext().startActivity(new Intent(v.getContext(), NewsDetail.class).putExtra("NewsBundle",bundle));
+                        }
+                    });
+
                 }
             }
         }

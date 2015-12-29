@@ -5,6 +5,7 @@ package app.anudroid.com.varte.Adapters;
  */
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +29,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.DataObjectHold
         public DataObjectHolder(View itemView) {
             super(itemView);
             headLine = (TextView) itemView.findViewById(R.id.txtHeadLine);
-            //itemView.setOnClickListener(this);
+            itemView.setOnClickListener(this);
         }
 
         @Override
@@ -57,7 +58,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.DataObjectHold
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
         holder.headLine.setText(mDataset.get(position).getTitle());
-
     }
 
     public void addItem(Entry dataObj, int index) {

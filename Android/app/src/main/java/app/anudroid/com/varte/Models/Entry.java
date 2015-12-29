@@ -8,35 +8,40 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import org.parceler.Parcel;
+
+@Parcel
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Entry {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String title;
+    String title;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Link_ link;
+     Link_ link;
     @JsonIgnore
-    private List<Category> category = new ArrayList<Category>();
+     List<Category> category = new ArrayList<Category>();
     @JsonIgnore
-    private Author author;
+     Author author;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String id;
+     String id;
     @JsonIgnore
-    private String updated;
+     String updated;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String published;
+     String published;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Summary summary;
+     Summary summary;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private CommentRss commentRss;
+     CommentRss commentRss;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private Comments comments;
+     Comments comments;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private OrigLink origLink;
+     OrigLink origLink;
     @JsonIgnore
-    private String creator;
+     String creator;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String date;
+     String date;
+
+    public Entry() {}
 
     /**
      * 

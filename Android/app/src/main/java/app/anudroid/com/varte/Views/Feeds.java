@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import app.anudroid.com.varte.Adapters.ChannelsAdapter;
+import app.anudroid.com.varte.Adapters.NewsAdapter;
 import app.anudroid.com.varte.Models.Feed;
 import app.anudroid.com.varte.R;
 import app.anudroid.com.varte.RAL.ApiClient;
@@ -22,6 +24,7 @@ public class Feeds extends AppCompatActivity {
 
     private ListView mListView;
     private ChannelsAdapter mAdapter;
+    private NewsAdapter mNewsAdapter;
     List<String> urls = Arrays.asList(
             "http://news.ycombinator.com/rss",
             "http://feeds.feedburner.com/2dopeboyz",

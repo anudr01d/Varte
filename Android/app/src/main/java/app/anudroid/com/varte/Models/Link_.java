@@ -5,13 +5,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import org.parceler.Parcel;
+
+@Parcel
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Link_ {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String href;
+    String href;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String rel;
+    String rel;
+
+    public Link_(){}
 
     /**
      * 

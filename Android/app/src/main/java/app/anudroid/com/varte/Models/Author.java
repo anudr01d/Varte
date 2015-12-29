@@ -5,12 +5,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import org.parceler.Parcel;
+
+@Parcel
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Author {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String name;
+     String name;
 
+    public Author(){}
     /**
      * 
      * @return
