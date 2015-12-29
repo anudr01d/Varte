@@ -4,6 +4,7 @@ package app.anudroid.com.varte.Adapters;
  * Created by Anudeep on 22/12/15.
  */
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -49,6 +50,7 @@ public class ChannelsAdapter extends BaseAdapter {
     public static class ViewHolder{
         RecyclerView channel;
         TextView channelName;
+
     }
     public View getView(int position, View convertView, ViewGroup parent) {
 
@@ -71,12 +73,12 @@ public class ChannelsAdapter extends BaseAdapter {
                 if (feed != null) {
                     mAdapter = new NewsAdapter(feed.getEntry());
                     mLayoutManager = new LinearLayoutManager(parent.getContext(), LinearLayoutManager.HORIZONTAL, false);
-                    itemDecoration = new DividerItemDecoration(parent.getContext(), LinearLayoutManager.HORIZONTAL);
+                    //itemDecoration = new DividerItemDecoration(parent.getContext(), LinearLayoutManager.HORIZONTAL);
                     holder.channel.setLayoutManager(mLayoutManager);
                     holder.channel.setAdapter(mAdapter);
                     holder.channelName.setText(feed.getTitle() != null ? feed.getTitle() : "Null");
                     holder.channel.setHasFixedSize(true);
-                    holder.channel.addItemDecoration(itemDecoration);
+                    //holder.channel.addItemDecoration(itemDecoration);
                 }
             }
         }

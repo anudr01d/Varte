@@ -3,6 +3,7 @@ package app.anudroid.com.varte.Adapters;
 /**
  * Created by Anudeep on 22/12/15.
  */
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,6 +57,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.DataObjectHold
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
         holder.headLine.setText(mDataset.get(position).getTitle());
+
     }
 
     public void addItem(Entry dataObj, int index) {

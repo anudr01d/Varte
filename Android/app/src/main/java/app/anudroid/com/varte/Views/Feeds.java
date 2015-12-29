@@ -51,7 +51,7 @@ public class Feeds extends AppCompatActivity {
         for(String url : urls) {
             ApiInterface service = ApiClient.createRetrofitService(ApiInterface.class);
             service.feedList(String.format("select * from feednormalizer where url='%1$s' and output='atom_1.0'", url), "json")
-            .subscribeOn(Schedulers.newThread())
+                    .subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Subscriber<app.anudroid.com.varte.Models.Feeds>() {
                         @Override
