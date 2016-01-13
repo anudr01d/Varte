@@ -24,6 +24,7 @@ import java.util.List;
 
 import app.anudroid.com.varte.Models.Channel;
 import app.anudroid.com.varte.Models.Feed;
+import app.anudroid.com.varte.Models.Feeds;
 import app.anudroid.com.varte.Models.News;
 import app.anudroid.com.varte.R;
 import app.anudroid.com.varte.Utils.DividerItemDecoration;
@@ -32,13 +33,14 @@ import app.anudroid.com.varte.Views.NewsDetail;
 public class ChannelsAdapter extends BaseAdapter {
     private static LayoutInflater inflater=null;
     int i=0;
-    private List<Feed> mDataset;
+    private List<Feeds> mDataset;
     private NewsAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     RecyclerView.ItemDecoration itemDecoration;
-    Feed feed;
+    Feeds feed;
+    int parent_position;
 
-    public ChannelsAdapter(Context activity, List<Feed> d) {
+    public ChannelsAdapter(Context activity, List<Feeds> d) {
         mDataset = d;
         inflater = ( LayoutInflater )activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -58,12 +60,13 @@ public class ChannelsAdapter extends BaseAdapter {
     public static class ViewHolder{
         RecyclerView channel;
         TextView channelName;
-
+        Feeds lstFeed;
     }
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
 
         View vi = convertView;
         ViewHolder holder;
+        parent_position = position;
 
         if(convertView==null){
             vi = inflater.inflate(R.layout.channel_item, null);
@@ -71,34 +74,35 @@ public class ChannelsAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.channel = (RecyclerView) vi.findViewById(R.id.channel);
             holder.channelName = (TextView) vi.findViewById(R.id.txtChannelName);
-
             vi.setTag( holder );
         }
         else {
             holder = (ViewHolder) vi.getTag();
-            if(mDataset!=null) {
-                feed = (Feed) mDataset.get(position);
-                if (feed != null) {
-                    mAdapter = new NewsAdapter(feed.getEntry());
+        }
+
+        if(mDataset!=null) {
+            feed = (Feeds) mDataset.get(position);
+            if (feed != null) {
+                if(holder.lstFeed==null) {
+                    holder.lstFeed = feed;
+                }
+                    mAdapter = new NewsAdapter(feed.getQuery().getResults().getFeed().getEntry());
                     mLayoutManager = new LinearLayoutManager(parent.getContext(), LinearLayoutManager.HORIZONTAL, false);
-                    //itemDecoration = new DividerItemDecoration(parent.getContext(), LinearLayoutManager.HORIZONTAL);
                     holder.channel.setLayoutManager(mLayoutManager);
                     holder.channel.setAdapter(mAdapter);
-                    holder.channelName.setText(feed.getTitle() != null ? feed.getTitle() : "Null");
-                    holder.channel.setHasFixedSize(true);
-                    //holder.channel.addItemDecoration(itemDecoration);
 
-                    ((NewsAdapter) mAdapter).setOnItemClickListener(new NewsAdapter.MyClickListener() {
+                    mAdapter.setOnItemClickListener(new NewsAdapter.MyClickListener() {
                         @Override
-                        public void onItemClick(int position, View v) {
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable("News", Parcels.wrap(feed.getEntry().get(position)));
-                            v.getContext().startActivity(new Intent(v.getContext(), NewsDetail.class).putExtra("NewsBundle",bundle));
+                        public void onItemClick(int pos, View v) {
+                            Toast.makeText(parent.getContext(), "Child :"+pos + " Parent :" + parent_position, Toast.LENGTH_SHORT).show();
+                            //Bundle bundle = new Bundle();
+                            //bundle.putParcelable("News", Parcels.wrap(holder.lstFeed.getQuery().getResults().getFeed().getEntry().get(pos)));
+                            //v.getContext().startActivity(new Intent(v.getContext(), NewsDetail.class).putExtra("NewsBundle", bundle));
                         }
                     });
-
+                    holder.channelName.setText(feed.getQuery().getResults().getFeed().getTitle() != null ? feed.getQuery().getResults().getFeed().getTitle() : "Null");
+                    holder.channel.setHasFixedSize(true);
                 }
-            }
         }
         return vi;
     }

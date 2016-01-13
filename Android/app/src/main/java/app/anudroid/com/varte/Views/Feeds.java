@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import app.anudroid.com.varte.Adapters.ChannelsAdapter;
@@ -33,7 +35,7 @@ public class Feeds extends AppCompatActivity {
             "http://www.forbes.com/real-time/feed2/",
             "https://www.ovoforums.com/forums/-/index.rss",
             "http://rss.slashdot.org/Slashdot/slashdotMain");
-    private List<Feed> lstfeed;
+    private List<app.anudroid.com.varte.Models.Feeds> lstfeed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class Feeds extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mListView = (ListView) findViewById(R.id.feed_list);
-        lstfeed = new ArrayList<Feed>();
+        lstfeed = new ArrayList<app.anudroid.com.varte.Models.Feeds>();
         mAdapter = new ChannelsAdapter(this,lstfeed);
         mListView.setAdapter(mAdapter);
         downloadData();
@@ -69,11 +71,21 @@ public class Feeds extends AppCompatActivity {
 
                         @Override
                         public final void onNext(app.anudroid.com.varte.Models.Feeds response) {
-                            lstfeed.add(response.getQuery().getResults().getFeed());
+                            lstfeed.add(response);
+                            sortFeed();
                             mAdapter.notifyDataSetChanged();
                         }
                     });
         }
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void sortFeed() {
+        Collections.sort(lstfeed, new Comparator<app.anudroid.com.varte.Models.Feeds>() {
+            public int compare(app.anudroid.com.varte.Models.Feeds left, app.anudroid.com.varte.Models.Feeds right) {
+                return Integer.compare(urls.indexOf(left.getQuery().getMeta().getUrl().getId()), urls.indexOf(right.getQuery().getMeta().getUrl().getId()));
+            }
+        });
     }
 
     @Override
