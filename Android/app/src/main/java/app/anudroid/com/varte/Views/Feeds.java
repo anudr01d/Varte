@@ -72,12 +72,13 @@ public class Feeds extends AppCompatActivity {
                         @Override
                         public final void onNext(app.anudroid.com.varte.Models.Feeds response) {
                             lstfeed.add(response);
-                            sortFeed();
-                            mAdapter.notifyDataSetChanged();
+                            if(lstfeed.size()==7) {
+                                sortFeed();
+                                mAdapter.notifyDataSetChanged();
+                            }
                         }
                     });
         }
-        mAdapter.notifyDataSetChanged();
     }
 
     private void sortFeed() {

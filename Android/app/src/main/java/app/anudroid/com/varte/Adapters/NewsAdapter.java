@@ -22,26 +22,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.DataObjectHold
     private List<Entry> mDataset;
     private static MyClickListener myClickListener;
 
-    public static class DataObjectHolder extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
-        TextView headLine;
-
-        public DataObjectHolder(View itemView) {
-            super(itemView);
-            headLine = (TextView) itemView.findViewById(R.id.txtHeadLine);
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            myClickListener.onItemClick(getPosition(), v);
-        }
-    }
-
-    public void setOnItemClickListener(MyClickListener myClickListener) {
-        this.myClickListener = myClickListener;
-    }
-
     public NewsAdapter(List<Entry> myDataset) {
         mDataset = myDataset;
     }
@@ -58,6 +38,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.DataObjectHold
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
         holder.headLine.setText(mDataset.get(position).getTitle());
+        holder.en = mDataset.get(position);
     }
 
     public void addItem(Entry dataObj, int index) {
@@ -76,7 +57,27 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.DataObjectHold
     }
 
     public interface MyClickListener {
-        public void onItemClick(int position, View v);
+        public void onItemClick(int position, View v, Entry en);
+    }
+
+    public void setOnItemClickListener(MyClickListener myClickListener) {
+        this.myClickListener = myClickListener;
+    }
+
+    public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView headLine;
+        Entry en;
+
+        public DataObjectHolder(View itemView) {
+            super(itemView);
+            headLine = (TextView) itemView.findViewById(R.id.txtHeadLine);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            myClickListener.onItemClick(getPosition(), v, en);
+        }
     }
 }
 

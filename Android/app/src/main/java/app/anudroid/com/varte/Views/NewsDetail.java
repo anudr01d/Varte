@@ -1,8 +1,10 @@
 package app.anudroid.com.varte.Views;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,24 +28,40 @@ import rx.schedulers.Schedulers;
 
 public class NewsDetail extends AppCompatActivity {
     TextView content;
-    TextView title;
+    Toolbar toolbar;
+    TextView txtTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_detail_view);
         content = (TextView) findViewById(R.id.txtContent);
-        title = (TextView) findViewById(R.id.txtTitle);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        txtTitle= (TextView) findViewById(R.id.txtTitle);
         displayData();
     }
 
     private void displayData(){
-        Bundle bun = getIntent().getBundleExtra("NewsBundle");
-        Entry entry = Parcels.unwrap(bun.getParcelable("News"));
-        title.setText(entry.getTitle());
-        content.setText(entry.getSummary().getContent());
+        try {
+            Bundle bun = getIntent().getBundleExtra("NewsBundle");
+            Entry entry = Parcels.unwrap(bun.getParcelable("News"));
+            txtTitle.setText(entry.getTitle());
+            content.setText(Html.fromHtml(entry.getSummary().getContent(), new Html.ImageGetter() {
+                @Override
+                public Drawable getDrawable(String source) {
+                    Drawable drawFromPath;
+                    int path = getResources().getIdentifier(source, "drawable", getPackageName());
+                    try {
+                        drawFromPath = (Drawable) getResources().getDrawable(path);
+                    } catch (Exception e) {
+                        return null;
+                    }
+                    drawFromPath.setBounds(0, 0, drawFromPath.getIntrinsicWidth(), drawFromPath.getIntrinsicHeight());
+                    return drawFromPath;
+                }
+            }, null));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
