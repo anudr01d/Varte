@@ -12,23 +12,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:gravity="center"
+        android:orientation="vertical"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <TextView
-            android:id="@+id/txtTitle"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical|start"
+            android:minHeight="130dip"
+            android:orientation="vertical"
             android:fitsSystemWindows="true"
-            android:padding="10dip"
-            android:textColor="#FFF"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:textSize="20sp"
-            android:textStyle="bold"
             app:layout_collapseMode="parallax"
-            android:minHeight="90dip"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_margin="10dip"
+                android:gravity="center_vertical|start"
+                android:text="News item"
+                android:textColor="#FFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginBottom="10dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:visibility="gone"
+                android:text="date"
+                android:textColor="#FFF" />
+        </LinearLayout>
 
     </android.support.design.widget.AppBarLayout>
 
