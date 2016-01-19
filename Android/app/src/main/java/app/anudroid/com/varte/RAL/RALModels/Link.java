@@ -15,6 +15,8 @@ public class Link {
     private String type;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String atom10;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String title;
 
     /**
      * 
@@ -88,4 +90,11 @@ public class Link {
         this.atom10 = atom10;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

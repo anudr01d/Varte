@@ -2,6 +2,7 @@ package app.anudroid.com.varte.Application;
 
 import android.app.Application;
 
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.squareup.otto.Bus;
 
 import app.anudroid.com.varte.R;
@@ -22,6 +23,7 @@ public class Varte extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        FlowManager.init(this);
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                         .setDefaultFontPath("fonts/OpenSans-Regular.ttf")
                         .setFontAttrId(R.attr.fontPath)

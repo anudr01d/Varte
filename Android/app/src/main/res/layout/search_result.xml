@@ -40,6 +40,7 @@
                 android:textSize="16sp" />
 
             <Button
+                android:id="@+id/btnAddFeed"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@android:color/holo_orange_dark"
@@ -47,6 +48,7 @@
                 android:layout_marginLeft="10dip"
                 android:layout_marginRight="10dip"
                 android:text="Add feed"
+                android:visibility="visible"
                 android:textColor="#fff" />
 
             <TextView

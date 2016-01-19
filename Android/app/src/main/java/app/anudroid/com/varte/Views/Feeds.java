@@ -53,49 +53,49 @@ public class Feeds extends AppCompatActivity {
         lstfeed = new ArrayList<app.anudroid.com.varte.RAL.RALModels.Feeds>();
         mAdapter = new ChannelsAdapter(this,lstfeed);
         mListView.setAdapter(mAdapter);
-        downloadData();
+//        downloadData();
     }
 
-    private void downloadData(){
-        lstfeed.clear();
-        for(String url : urls) {
-            ApiInterface service = ApiClient.createRetrofitService(ApiInterface.class);
-            service.feedList(String.format("select * from feednormalizer where url='%1$s' and output='atom_1.0'", url), "json")
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<app.anudroid.com.varte.RAL.RALModels.Feeds>() {
-                        @Override
-                        public final void onCompleted() {
+//    private void downloadData(){
+//        lstfeed.clear();
+//        for(String url : urls) {
+//            ApiInterface service = ApiClient.createRetrofitService(ApiInterface.class);
+//            service.feedList(String.format("select * from feednormalizer where url='%1$s' and output='atom_1.0'", url), "json")
+//                    .subscribeOn(Schedulers.newThread())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(new Subscriber<app.anudroid.com.varte.RAL.RALModels.Feeds>() {
+//                        @Override
+//                        public final void onCompleted() {
+//
+//                        }
+//
+//                        @Override
+//                        public final void onError(Throwable e) {
+//                            Log.e("Varte", e.getMessage());
+//                        }
+//
+//                        @Override
+//                        public final void onNext(app.anudroid.com.varte.RAL.RALModels.Feeds response) {
+//                            lstfeed.add(response);
+//                            if(lstfeed.size()==7) {
+//                                txtProgress.setVisibility(View.GONE);
+//                                sortFeed();
+//                                mAdapter.notifyDataSetChanged();
+//                            } else {
+//                                txtProgress.setText(lstfeed.size() + " Feed(s) loaded..");
+//                            }
+//                        }
+//                    });
+//        }
+//    }
 
-                        }
-
-                        @Override
-                        public final void onError(Throwable e) {
-                            Log.e("Varte", e.getMessage());
-                        }
-
-                        @Override
-                        public final void onNext(app.anudroid.com.varte.RAL.RALModels.Feeds response) {
-                            lstfeed.add(response);
-                            if(lstfeed.size()==7) {
-                                txtProgress.setVisibility(View.GONE);
-                                sortFeed();
-                                mAdapter.notifyDataSetChanged();
-                            } else {
-                                txtProgress.setText(lstfeed.size() + " Feed(s) loaded..");
-                            }
-                        }
-                    });
-        }
-    }
-
-    private void sortFeed() {
-        Collections.sort(lstfeed, new Comparator<app.anudroid.com.varte.RAL.RALModels.Feeds>() {
-            public int compare(app.anudroid.com.varte.RAL.RALModels.Feeds left, app.anudroid.com.varte.RAL.RALModels.Feeds right) {
-                return Integer.compare(urls.indexOf(left.getQuery().getMeta().getUrl().getId()), urls.indexOf(right.getQuery().getMeta().getUrl().getId()));
-            }
-        });
-    }
+//    private void sortFeed() {
+//        Collections.sort(lstfeed, new Comparator<app.anudroid.com.varte.RAL.RALModels.Feeds>() {
+//            public int compare(app.anudroid.com.varte.RAL.RALModels.Feeds left, app.anudroid.com.varte.RAL.RALModels.Feeds right) {
+//                return Integer.compare(urls.indexOf(left.getQuery().getMeta().getUrl().getId()), urls.indexOf(right.getQuery().getMeta().getUrl().getId()));
+//            }
+//        });
+//    }
 
     @Override
     protected void attachBaseContext(Context newBase) {

@@ -10,6 +10,17 @@ public class Results {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Feed feed;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Link link;
+
+    public Link getLink() {
+        return link;
+    }
+
+    public void setLink(Link link) {
+        this.link = link;
+    }
+
     /**
      * 
      * @return
