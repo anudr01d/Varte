@@ -14,23 +14,41 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    <EditText
-        android:id="@+id/edtSearchFeed"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dip"
-        android:hint="Search for a feed"
-        android:padding="10dip" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edtSearchFeed"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dip"
+            android:layout_weight="1"
+            android:hint="Search for a feed"
+            android:padding="10dip" />
+
+        <Button
+            android:id="@+id/btngo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dip"
+            android:background="@android:color/holo_blue_light"
+            android:text="Go"
+            android:textColor="#FFF" />
+    </LinearLayout>
 
     <TextView
+        android:id="@+id/txtprogress"
+        fontPath="fonts/OpenSans-Regular.ttf"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_gravity="center"
         android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:visibility="gone"
         android:text="Loading.."
-        fontPath="fonts/OpenSans-Regular.ttf"
-        android:id="@+id/txtprogress"
-        android:layout_gravity="center" />
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/search_results"

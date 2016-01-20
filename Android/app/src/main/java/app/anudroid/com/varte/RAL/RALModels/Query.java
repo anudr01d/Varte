@@ -73,7 +73,7 @@ public class Query {
     }
 
     /**
-     * 
+     *
      * @return
      *     The meta
      */
@@ -82,7 +82,7 @@ public class Query {
     }
 
     /**
-     * 
+     *
      * @param meta
      *     The meta
      */

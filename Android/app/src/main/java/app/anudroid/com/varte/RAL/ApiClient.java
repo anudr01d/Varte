@@ -1,6 +1,7 @@
 package app.anudroid.com.varte.RAL;
 
 import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.logging.HttpLoggingInterceptor;
 
 import retrofit.JacksonConverterFactory;
 import retrofit.Retrofit;
@@ -12,9 +13,15 @@ import retrofit.RxJavaCallAdapterFactory;
 
 public class ApiClient {
     public static <T> T createRetrofitService(final Class<T> clazz) {
+
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient httpClient = new OkHttpClient();
+        httpClient.interceptors().add(logging);
+
         Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("https://query.yahooapis.com")
-                    .client(new OkHttpClient())
+                    .client(httpClient)
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(JacksonConverterFactory.create())
                     .build();

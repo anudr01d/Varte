@@ -5,6 +5,8 @@ import android.view.View;
 
 import java.util.List;
 
+import app.anudroid.com.varte.Application.Varte;
+import app.anudroid.com.varte.Bus.RxBus;
 import app.anudroid.com.varte.Channel;
 import app.anudroid.com.varte.RAL.RALModels.Feeds;
 import app.anudroid.com.varte.RAL.RALModels.Query;
@@ -20,10 +22,11 @@ import rx.schedulers.Schedulers;
 public class ApiServiceImpl implements ApiService {
     private StoreServiceImpl storeService;
     private ApiServiceProcessor processor;
+    private RxBus rxBus;
 
     public ApiServiceImpl() {
-        storeService = new StoreServiceImpl();
         processor = new ApiServiceProcessor();
+        rxBus =  Varte.getRxBusSingleton();
     }
 
     public void downloadFeeds(List<Channel> feedUrls) {
@@ -45,6 +48,7 @@ public class ApiServiceImpl implements ApiService {
                         @Override
                         public final void onNext(app.anudroid.com.varte.RAL.RALModels.Feeds response) {
                             //save the channels within the db.
+                            storeService = new StoreServiceImpl();
                             ch.entries = processor.ProcessChannels(response);
                             storeService.AddOrUpdateFeed(ch);
                         }
@@ -57,7 +61,7 @@ public class ApiServiceImpl implements ApiService {
         service.getFeedLink(url, "json")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Query>() {
+                .subscribe(new Subscriber<app.anudroid.com.varte.RAL.RALModels.Feeds>() {
                     @Override
                     public final void onCompleted() {
 
@@ -69,9 +73,13 @@ public class ApiServiceImpl implements ApiService {
                     }
 
                     @Override
-                    public final void onNext(Query response) {
-                        //notify someone that there is new data. preferably ui
-
+                    public final void onNext(app.anudroid.com.varte.RAL.RALModels.Feeds response) {
+                       if(response!=null) {
+                        //Use eventbus and inform the ui that there is new data   
+                           if (rxBus.hasObservers()) {
+                               rxBus.send(new RxBus.RxEvent(response.getQuery()));
+                           }
+                       }
                     }
                 });
     }

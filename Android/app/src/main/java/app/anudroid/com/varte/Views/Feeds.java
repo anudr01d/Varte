@@ -47,7 +47,6 @@ public class Feeds extends AppCompatActivity {
         setContentView(R.layout.activity_feeds);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         mListView = (ListView) findViewById(R.id.feed_list);
         txtProgress = (TextView) findViewById(R.id.txtprogress);
         lstfeed = new ArrayList<app.anudroid.com.varte.RAL.RALModels.Feeds>();

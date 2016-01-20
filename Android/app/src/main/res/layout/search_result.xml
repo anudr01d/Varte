@@ -26,7 +26,7 @@
                 android:padding="10dip"
                 android:text="Title"
                 android:textColor="#444"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -37,7 +37,7 @@
                 android:paddingLeft="10dip"
                 android:paddingRight="10dip"
                 android:text="Short description"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/btnAddFeed"
@@ -45,8 +45,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/holo_orange_dark"
                 android:padding="10dip"
-                android:layout_marginLeft="10dip"
-                android:layout_marginRight="10dip"
+                android:layout_margin="10dip"
                 android:text="Add feed"
                 android:visibility="visible"
                 android:textColor="#fff" />

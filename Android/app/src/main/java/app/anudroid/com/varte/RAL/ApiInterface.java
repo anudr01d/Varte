@@ -13,7 +13,7 @@ public interface ApiInterface {
     Observable<Feeds> feedList(@Query("q") String feedUrl, @Query("format") String feedFormat);
 
     @GET("/v1/public/yql/psychemedia/feedautodetect")
-    Observable<app.anudroid.com.varte.RAL.RALModels.Query> getFeedLink(@Query("url") String siteUrl, @Query("format") String feedFormat);
+    Observable<app.anudroid.com.varte.RAL.RALModels.Feeds> getFeedLink(@Query("url") String siteUrl, @Query("format") String feedFormat);
 }
 
 //http://query.yahooapis.com/v1/public/yql/psychemedia/feedautodetect?url=www.2dopeboyz.com&format=json
