@@ -16,22 +16,23 @@ import android.widget.TextView;
 
 import org.parceler.Parcels;
 import java.util.List;
-import app.anudroid.com.varte.RAL.RALModels.Entry;
-import app.anudroid.com.varte.RAL.RALModels.Feeds;
+
+import app.anudroid.com.varte.Channel;
+import app.anudroid.com.varte.Entry;
 import app.anudroid.com.varte.R;
 import app.anudroid.com.varte.Views.NewsDetail;
 
 public class ChannelsAdapter extends BaseAdapter {
     private static LayoutInflater inflater=null;
     int i=0;
-    private List<Feeds> mDataset;
+    private List<Channel> mDataset;
     private NewsAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     RecyclerView.ItemDecoration itemDecoration;
-    Feeds feed;
+    Channel channel;
     int parent_position;
 
-    public ChannelsAdapter(Context activity, List<Feeds> d) {
+    public ChannelsAdapter(Context activity, List<Channel> d) {
         mDataset = d;
         inflater = ( LayoutInflater )activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -51,7 +52,7 @@ public class ChannelsAdapter extends BaseAdapter {
     public static class ViewHolder{
         RecyclerView channel;
         TextView channelName;
-        Feeds lstFeed;
+        Channel lstFeed;
         int vh_pos;
     }
     public View getView(int position, View convertView, final ViewGroup parent) {
@@ -72,12 +73,12 @@ public class ChannelsAdapter extends BaseAdapter {
             holder = (ViewHolder) vi.getTag();
         }
         if(mDataset!=null) {
-            feed = (Feeds) mDataset.get(position);
-            if (feed != null) {
+            channel = (Channel) mDataset.get(position);
+            if (channel != null) {
                 if(holder.lstFeed==null) {
-                    holder.lstFeed = feed;
+                    holder.lstFeed = channel;
                 }
-                    mAdapter = new NewsAdapter(feed.getQuery().getResults().getFeed().getEntry());
+                    mAdapter = new NewsAdapter(channel.entries);
                     mLayoutManager = new LinearLayoutManager(parent.getContext(), LinearLayoutManager.HORIZONTAL, false);
                     holder.channel.setLayoutManager(mLayoutManager);
                     holder.channel.setAdapter(mAdapter);
@@ -89,7 +90,7 @@ public class ChannelsAdapter extends BaseAdapter {
                             v.getContext().startActivity(new Intent(v.getContext(), NewsDetail.class).putExtra("NewsBundle", bundle));
                         }
                     });
-                    holder.channelName.setText(feed.getQuery().getResults().getFeed().getTitle() != null ? feed.getQuery().getResults().getFeed().getTitle() : "Null");
+                    holder.channelName.setText(channel.Title != null ? channel.Title : "Null");
                     holder.channel.setHasFixedSize(true);
                 }
         }

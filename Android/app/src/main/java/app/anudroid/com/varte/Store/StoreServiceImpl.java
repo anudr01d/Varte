@@ -1,5 +1,6 @@
 package app.anudroid.com.varte.Store;
 
+import com.orhanobut.hawk.Hawk;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 import app.anudroid.com.varte.Channel;
 import app.anudroid.com.varte.Channel_Table;
 import app.anudroid.com.varte.Entry;
+import app.anudroid.com.varte.Entry_Table;
 import app.anudroid.com.varte.RAL.ApiServiceImpl;
 
 /**
@@ -27,15 +29,26 @@ public class StoreServiceImpl implements StoreService{
             channel.insert();
         }
     }
+
+    public void clearEntries(Channel channel) {
+        SQLite.delete(Entry.class)
+                .where(Entry_Table.channelForeignKeyContainer_ChannelId.is(channel.ChannelId))
+                .query();
+    }
+
     public void DeleteFeed(int channelId) {
         SQLite.delete(Channel.class)
                 .where(Channel_Table.ChannelId.is(channelId))
                 .query();
     }
-    public List<Channel> getFeedList(){
+    public List<Channel> getFeedList(boolean refresh){
         List<Channel> lstChan = SQLite.select().from(Channel.class).queryList();
-        if(RefreshTimeStamp().equals("1"))
-            apimpl.downloadFeeds(lstChan);//needs to be asynchronous
+        for(Channel ch : lstChan) {
+            if(ch.getAllEntries()==null || ch.getAllEntries().size()==0 || refresh) {
+                apimpl.downloadFeed(ch);//needs to be asynchronous
+            }
+        }
+
         return lstChan;
     }
     public List<Entry> getEntries(Channel ch){
@@ -43,9 +56,21 @@ public class StoreServiceImpl implements StoreService{
     }
     public void UpdateRefreshTimestamp(String timeStamp){
     }
-    public String RefreshTimeStamp() {
-        //fetch timestamp from shared preferences.
+    public String RefreshTimeStamp(String timestampKey) {
+        String timestamp = Hawk.get(timestampKey);
         Date d = new Date();
         return d.toString();
+    }
+
+    public void searchFeedLink(String keyword) {
+        apimpl.searchFeedLink(keyword);
+    }
+
+    public boolean AddFeedToPreference(String key, List<String> lstprefs) {
+        return Hawk.put(key, lstprefs);
+    }
+
+    public List<String> GetFeedFromPreference(String key) {
+        return Hawk.get(key);
     }
 }

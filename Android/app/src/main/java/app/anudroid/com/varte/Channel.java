@@ -8,14 +8,14 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import org.parceler.Parcel;
+
 import java.util.List;
-
-import app.anudroid.com.varte.Entry_Table;
-
 
 /**
  * Created by anudeep on 1/18/2016.
  */
+@Parcel
 @ModelContainer
 @Table(database = FeedsDb.class)
 public class Channel extends BaseModel{
@@ -27,6 +27,7 @@ public class Channel extends BaseModel{
 
     @Column
     public String url;
+
 
     public List<Entry> entries;
     @OneToMany(methods = {OneToMany.Method.SAVE, OneToMany.Method.DELETE}, variableName = "entries")

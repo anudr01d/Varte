@@ -8,6 +8,7 @@ import java.util.List;
 import app.anudroid.com.varte.Application.Varte;
 import app.anudroid.com.varte.Bus.RxBus;
 import app.anudroid.com.varte.Channel;
+import app.anudroid.com.varte.Entry;
 import app.anudroid.com.varte.RAL.RALModels.Feeds;
 import app.anudroid.com.varte.RAL.RALModels.Query;
 import app.anudroid.com.varte.Store.StoreService;
@@ -29,7 +30,7 @@ public class ApiServiceImpl implements ApiService {
         rxBus =  Varte.getRxBusSingleton();
     }
 
-    public void downloadFeeds(List<Channel> feedUrls) {
+    public void downloadFeeds(final List<Channel> feedUrls) {
         for (final Channel ch : feedUrls) {
             ApiInterface service = ApiClient.createRetrofitService(ApiInterface.class);
             service.feedList(String.format("select * from feednormalizer where url='%1$s' and output='atom_1.0'", ch.url), "json")
@@ -51,9 +52,50 @@ public class ApiServiceImpl implements ApiService {
                             storeService = new StoreServiceImpl();
                             ch.entries = processor.ProcessChannels(response);
                             storeService.AddOrUpdateFeed(ch);
+                            if(feedUrls.indexOf(ch) == feedUrls.size()-1) {
+                                //notify the ui to update.
+                                if (rxBus.hasObservers()) {
+                                    rxBus.send(new RxBus.RxEvent(new Object()));
+                                }
+                            }
                         }
                     });
         }
+    }
+
+    public void downloadFeed(final Channel channel) {
+            ApiInterface service = ApiClient.createRetrofitService(ApiInterface.class);
+            service.feedList(String.format("select * from feednormalizer where url='%1$s' and output='atom_1.0'", channel.url), "json")
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Subscriber<Feeds>() {
+                        @Override
+                        public final void onCompleted() {
+                        }
+
+                        @Override
+                        public final void onError(Throwable e) {
+                            Log.e("Varte", e.getMessage());
+                        }
+
+                        @Override
+                        public final void onNext(app.anudroid.com.varte.RAL.RALModels.Feeds response) {
+                            //save the channels within the db.
+                            storeService = new StoreServiceImpl();
+                            storeService.clearEntries(channel);
+                            channel.entries = processor.ProcessChannels(response);
+                            for(Entry en : channel.entries) {
+                                Entry ent = new Entry();
+                                ent = en;
+                                ent.associateChannel(channel);
+                                ent.save();
+                            }
+                                //notify the ui to update.
+                                if (rxBus.hasObservers()) {
+                                    rxBus.send(new RxBus.RxEvent(new Object()));
+                                }
+                        }
+                    });
     }
 
     public void searchFeedLink(String url) {
@@ -75,7 +117,7 @@ public class ApiServiceImpl implements ApiService {
                     @Override
                     public final void onNext(app.anudroid.com.varte.RAL.RALModels.Feeds response) {
                        if(response!=null) {
-                        //Use eventbus and inform the ui that there is new data   
+                        //Use eventbus and inform the ui that there is new data
                            if (rxBus.hasObservers()) {
                                rxBus.send(new RxBus.RxEvent(response.getQuery()));
                            }

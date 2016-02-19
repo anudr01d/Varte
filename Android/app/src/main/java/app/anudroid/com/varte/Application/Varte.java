@@ -38,15 +38,6 @@ public class Varte extends Application{
         Hawk.init(this)
                 .setEncryptionMethod(HawkBuilder.EncryptionMethod.NO_ENCRYPTION)
                 .setStorage(HawkBuilder.newSharedPrefStorage(this))
-                .setCallback(new HawkBuilder.Callback() {
-                    @Override
-                    public void onSuccess() {
-                    }
-
-                    @Override
-                    public void onFail(Exception e) {
-                    }
-                })
                 .build();
     }
 }

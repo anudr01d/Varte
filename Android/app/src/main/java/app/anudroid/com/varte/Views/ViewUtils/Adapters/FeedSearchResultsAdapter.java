@@ -15,13 +15,14 @@ import java.util.List;
 
 import app.anudroid.com.varte.R;
 import app.anudroid.com.varte.RAL.RALModels.Entry;
+import app.anudroid.com.varte.RAL.RALModels.Link;
 import app.anudroid.com.varte.RAL.RALModels.Query;
 
 public class FeedSearchResultsAdapter extends RecyclerView.Adapter<FeedSearchResultsAdapter.DataObjectHolder> {
-    private List<Query> mDataset;
+    private List<Link> mDataset;
     private static MyClickListener myClickListener;
 
-    public FeedSearchResultsAdapter(List<Query> myDataset) {
+    public FeedSearchResultsAdapter(List<Link> myDataset) {
         mDataset = myDataset;
     }
 
@@ -36,9 +37,15 @@ public class FeedSearchResultsAdapter extends RecyclerView.Adapter<FeedSearchRes
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.txtTitle.setText(mDataset.get(position).getResults().getLink().getTitle());
-        holder.txtDescription.setText(mDataset.get(position).getResults().getLink().getTitle());
-        holder.btnAddFeed.setVisibility(View.VISIBLE);
+        holder.txtTitle.setText(mDataset.get(position).getTitle());
+        holder.txtDescription.setText(mDataset.get(position).getTitle());
+        if(mDataset.get(position).isAdded()) {
+            holder.txtAlreadyAdded.setVisibility(View.VISIBLE);
+            holder.btnAddFeed.setVisibility(View.GONE);
+        } else {
+            holder.btnAddFeed.setVisibility(View.VISIBLE);
+            holder.txtAlreadyAdded.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -66,7 +73,7 @@ public class FeedSearchResultsAdapter extends RecyclerView.Adapter<FeedSearchRes
             txtDescription = (TextView) itemView.findViewById(R.id.txtDescription);
             txtAlreadyAdded = (TextView) itemView.findViewById(R.id.txtAlreadyAdded);
             btnAddFeed = (Button) itemView.findViewById(R.id.btnAddFeed);
-            itemView.setOnClickListener(this);
+            btnAddFeed.setOnClickListener(this);
         }
 
         @Override

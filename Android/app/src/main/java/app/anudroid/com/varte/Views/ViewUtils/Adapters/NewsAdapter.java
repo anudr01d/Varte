@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import app.anudroid.com.varte.RAL.RALModels.Entry;
+import app.anudroid.com.varte.Entry;
 import app.anudroid.com.varte.R;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.DataObjectHolder> {
@@ -33,7 +33,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.DataObjectHold
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.headLine.setText(mDataset.get(position).getTitle());
+        holder.headLine.setText(mDataset.get(position).Title);
         holder.en = mDataset.get(position);
     }
 

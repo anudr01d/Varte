@@ -6,50 +6,43 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import org.parceler.Parcels;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import app.anudroid.com.varte.Application.Varte;
 import app.anudroid.com.varte.Bus.RxBus;
+import app.anudroid.com.varte.Business.FeedServiceImpl;
+import app.anudroid.com.varte.Channel;
 import app.anudroid.com.varte.R;
-import app.anudroid.com.varte.RAL.ApiClient;
-import app.anudroid.com.varte.RAL.ApiInterface;
-import app.anudroid.com.varte.RAL.ApiServiceImpl;
-import app.anudroid.com.varte.RAL.RALModels.Entry;
+import app.anudroid.com.varte.RAL.RALModels.Link;
 import app.anudroid.com.varte.RAL.RALModels.Query;
-import app.anudroid.com.varte.Store.StoreServiceImpl;
 import app.anudroid.com.varte.Views.ViewUtils.Adapters.FeedSearchResultsAdapter;
-import app.anudroid.com.varte.Views.ViewUtils.Adapters.NewsAdapter;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 public class SearchFeed extends AppCompatActivity {
     private TextView txtProgress;
     private EditText edtSearchFeed;
     private FeedSearchResultsAdapter mAdapter;
-    private List<Query> lstfeed;
-    private StoreServiceImpl storeService;
-    private ApiServiceImpl apiService;
+    private FeedServiceImpl feedService;
     private RxBus _rxBus;
     private CompositeSubscription _subscriptions;
-    private List<Query> lstquery;
+    private List<Link> lstquery;
     private RecyclerView mRecyclerView;
-    private Button btngo;
 
     public SearchFeed (){
-        storeService = new StoreServiceImpl();
-        apiService = new ApiServiceImpl();
+        feedService = new FeedServiceImpl();
         _rxBus = Varte.getRxBusSingleton();
     }
 
@@ -62,21 +55,43 @@ public class SearchFeed extends AppCompatActivity {
 
         txtProgress = (TextView) findViewById(R.id.txtprogress);
         edtSearchFeed = (EditText) findViewById(R.id.edtSearchFeed);
-        mRecyclerView = (RecyclerView) findViewById(R.id.search_results);
-        btngo = (Button) findViewById(R.id.btngo);
+        edtSearchFeed.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    txtProgress.setVisibility(View.VISIBLE);
+                    feedService.searchFeedLink(edtSearchFeed.getText().toString().trim());
+                    return true;
+                }
+                return false;
+            }
+        });
 
-        lstquery = new ArrayList<Query>();
+        mRecyclerView = (RecyclerView) findViewById(R.id.search_results);
+
+
+        lstquery = new ArrayList<Link>();
         mAdapter = new FeedSearchResultsAdapter(lstquery);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setHasFixedSize(true);
 
-        btngo.setOnClickListener(new View.OnClickListener() {
+        mAdapter.setOnItemClickListener(new FeedSearchResultsAdapter.MyClickListener() {
             @Override
-            public void onClick(View v) {
-                txtProgress.setVisibility(View.VISIBLE);
-                apiService.searchFeedLink(edtSearchFeed.getText().toString().trim());
+            public void onItemClick(int position, View v) {
+                List<String> lstfeeds = feedService.GetFeedFromPreference("prefkey");
+                if(lstfeeds==null) {
+                    lstfeeds = new ArrayList<String>();
+                }
+                    lstfeeds.add(lstquery.get(position).getHref());
+                    Channel ch = new Channel();
+                    ch.Title = lstquery.get(position).getTitle();
+                    ch.url = lstquery.get(position).getHref();
+                    feedService.AddOrUpdateFeed(ch);
+                    feedService.AddFeedToPreference("prefkey", lstfeeds);
+                startActivity(new Intent(SearchFeed.this, Feeds.class));
+                finish();
             }
         });
     }
@@ -92,18 +107,44 @@ public class SearchFeed extends AppCompatActivity {
                             @Override
                             public void call(Object event) {
                                 if (event instanceof RxBus.RxEvent) {
-                                    Query q = (Query)((RxBus.RxEvent) event).getObj();
-                                    if(q!=null) {
-                                        txtProgress.setVisibility(View.GONE);
-                                        lstquery.add(q);
+                                    Object obj = ((RxBus.RxEvent) event).getObj();
+                                    if(obj instanceof Query) {
+                                        Query q = (Query)obj;
+                                        if (q != null) {
+                                            try {
+                                                txtProgress.setVisibility(View.GONE);
+                                                List<String> lstfeeds = feedService.GetFeedFromPreference("prefkey");
+                                                String strlnk = q.getResults().getLink();
+                                                ObjectMapper mapper = new ObjectMapper()
+                                                        .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+                                                List<Link> lstlnk = mapper.readValue(strlnk, new TypeReference<List<Link>>() {
+                                                });
+                                                for (Link lnk : lstlnk) {
+                                                    if (lstfeeds != null && lstfeeds.contains(lnk.getHref())) {
+                                                        lnk.setAdded(true);
+                                                    } else {
+                                                        lnk.setAdded(false);
+                                                    }
+                                                    lstquery.add(lnk);
+                                                }
+                                            }catch (Exception e) {e.printStackTrace();}
+
+                                        }
                                         mAdapter.notifyDataSetChanged();
+                                    }
                                     } else {
                                         txtProgress.setText("There was no feed found for the given url");
                                         txtProgress.setVisibility(View.VISIBLE);
                                     }
                                 }
-                            }
-                        }));
+                            }));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(SearchFeed.this,Feeds.class));
+        finish();
     }
 
     @Override

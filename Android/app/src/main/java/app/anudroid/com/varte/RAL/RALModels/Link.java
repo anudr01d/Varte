@@ -18,6 +18,16 @@ public class Link {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String title;
 
+    private boolean isAdded;
+
+    public boolean isAdded() {
+        return isAdded;
+    }
+
+    public void setAdded(boolean added) {
+        isAdded = added;
+    }
+
     /**
      * 
      * @return

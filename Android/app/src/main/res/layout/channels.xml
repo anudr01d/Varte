@@ -19,6 +19,7 @@
         android:text="0 Feed(s) loaded.."
         fontPath="fonts/OpenSans-Regular.ttf"
         android:id="@+id/txtprogress"
+        android:visibility="gone"
         android:layout_gravity="center" />
 
     <ListView

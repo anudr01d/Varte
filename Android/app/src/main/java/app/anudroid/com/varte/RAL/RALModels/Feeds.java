@@ -28,4 +28,8 @@ public class Feeds {
         this.query = query;
     }
 
+    public Feeds reorderFeeds() {
+        return this;
+    }
+
 }

@@ -1,9 +1,20 @@
 package app.anudroid.com.varte.Business;
 
+import java.util.List;
+
+import app.anudroid.com.varte.Channel;
+import app.anudroid.com.varte.Entry;
+
 /**
- * Created by anudeep on 1/18/2016.
+ * Created by Anudeep on 21/01/16.
  */
-public class FeedService {
-    //Inject the processor within this class
-    //use this class from UI to fetch data
+public interface FeedService {
+    public void AddOrUpdateFeed(Channel channel);
+    public void DeleteFeed(int channelId);
+    public List<Channel> getFeedList(boolean refresh);
+    public List<Entry> getEntries(Channel ch);
+    public void UpdateRefreshTimestamp(String timeStamp);
+    public boolean AddFeedToPreference(String key, List<String> lstprefs);
+    public List<String> GetFeedFromPreference(String key);
+    public void searchFeedLink(String keyword);
 }

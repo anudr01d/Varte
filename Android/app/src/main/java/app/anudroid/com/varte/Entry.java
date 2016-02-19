@@ -8,9 +8,12 @@ import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 import com.raizlabs.android.dbflow.structure.container.ForeignKeyContainer;
 
+import org.parceler.Parcel;
+
 /**
  * Created by anudeep on 1/18/2016.
  */
+@Parcel(analyze = Entry.class)
 @Table(database = FeedsDb.class)
 public class Entry extends BaseModel {
 
@@ -24,7 +27,7 @@ public class Entry extends BaseModel {
     public String TimeStamp;
 
     @ForeignKey(saveForeignKeyModel = false)
-    ForeignKeyContainer<Channel> channelForeignKeyContainer;
+    transient ForeignKeyContainer<Channel> channelForeignKeyContainer;
 
     public void associateChannel(Channel channel) {
         channelForeignKeyContainer = FlowManager.getContainerAdapter(Channel.class).toForeignKeyContainer(channel);
