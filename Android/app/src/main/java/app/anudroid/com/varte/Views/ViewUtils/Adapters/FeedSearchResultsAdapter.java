@@ -5,6 +5,7 @@ package app.anudroid.com.varte.Views.ViewUtils.Adapters;
  */
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,14 +16,15 @@ import java.util.List;
 
 import app.anudroid.com.varte.R;
 import app.anudroid.com.varte.RAL.RALModels.Entry;
+import app.anudroid.com.varte.RAL.RALModels.Entry_;
 import app.anudroid.com.varte.RAL.RALModels.Link;
 import app.anudroid.com.varte.RAL.RALModels.Query;
 
 public class FeedSearchResultsAdapter extends RecyclerView.Adapter<FeedSearchResultsAdapter.DataObjectHolder> {
-    private List<Link> mDataset;
+    private List<Entry_> mDataset;
     private static MyClickListener myClickListener;
 
-    public FeedSearchResultsAdapter(List<Link> myDataset) {
+    public FeedSearchResultsAdapter(List<Entry_> myDataset) {
         mDataset = myDataset;
     }
 
@@ -37,8 +39,9 @@ public class FeedSearchResultsAdapter extends RecyclerView.Adapter<FeedSearchRes
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.txtTitle.setText(mDataset.get(position).getTitle());
-        holder.txtDescription.setText(mDataset.get(position).getTitle());
+        holder.txtTitle.setText(Html.fromHtml(mDataset.get(position).getTitle()));
+        holder.txtDescription.setText(Html.fromHtml(mDataset.get(position).getContentSnippet()));
+        holder.txtFeedUrl.setText(mDataset.get(position).getUrl());
         if(mDataset.get(position).isAdded()) {
             holder.txtAlreadyAdded.setVisibility(View.VISIBLE);
             holder.btnAddFeed.setVisibility(View.GONE);
@@ -62,7 +65,7 @@ public class FeedSearchResultsAdapter extends RecyclerView.Adapter<FeedSearchRes
     }
 
     public static class DataObjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView txtTitle;
+        TextView txtTitle, txtFeedUrl;
         TextView txtDescription;
         Button btnAddFeed;
         TextView txtAlreadyAdded;
@@ -70,6 +73,7 @@ public class FeedSearchResultsAdapter extends RecyclerView.Adapter<FeedSearchRes
         public DataObjectHolder(View itemView) {
             super(itemView);
             txtTitle = (TextView) itemView.findViewById(R.id.txtTitle);
+            txtFeedUrl = (TextView) itemView.findViewById(R.id.txtFeedUrl);
             txtDescription = (TextView) itemView.findViewById(R.id.txtDescription);
             txtAlreadyAdded = (TextView) itemView.findViewById(R.id.txtAlreadyAdded);
             btnAddFeed = (Button) itemView.findViewById(R.id.btnAddFeed);

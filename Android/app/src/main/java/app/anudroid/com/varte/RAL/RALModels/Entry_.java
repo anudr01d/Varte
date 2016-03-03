@@ -12,12 +12,12 @@ import java.util.List;
 
 @Parcel
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Entry {
+public class Entry_ {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     String title;
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    Link_ link;
+    String link;
     @JsonIgnore
     List<Category> category = new ArrayList<Category>();
     @JsonIgnore
@@ -71,7 +71,7 @@ public class Entry {
         this.url = url;
     }
 
-    public Entry() {
+    public Entry_() {
     }
 
     /**
@@ -91,14 +91,14 @@ public class Entry {
     /**
      * @return The link
      */
-    public Link_ getLink() {
+    public String getLink() {
         return link;
     }
 
     /**
      * @param link The link
      */
-    public void setLink(Link_ link) {
+    public void setLink(String link) {
         this.link = link;
     }
 

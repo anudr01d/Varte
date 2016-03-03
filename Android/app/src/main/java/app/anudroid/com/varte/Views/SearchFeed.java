@@ -25,8 +25,12 @@ import app.anudroid.com.varte.Bus.RxBus;
 import app.anudroid.com.varte.Business.FeedServiceImpl;
 import app.anudroid.com.varte.Channel;
 import app.anudroid.com.varte.R;
+import app.anudroid.com.varte.RAL.RALModels.Entry;
+import app.anudroid.com.varte.RAL.RALModels.Entry_;
 import app.anudroid.com.varte.RAL.RALModels.Link;
 import app.anudroid.com.varte.RAL.RALModels.Query;
+import app.anudroid.com.varte.RAL.RALModels.QueryResult;
+import app.anudroid.com.varte.RAL.RALModels.ResponseData;
 import app.anudroid.com.varte.Views.ViewUtils.Adapters.FeedSearchResultsAdapter;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
@@ -38,7 +42,7 @@ public class SearchFeed extends AppCompatActivity {
     private FeedServiceImpl feedService;
     private RxBus _rxBus;
     private CompositeSubscription _subscriptions;
-    private List<Link> lstquery;
+    private List<Entry_> lstquery;
     private RecyclerView mRecyclerView;
 
     public SearchFeed (){
@@ -70,7 +74,7 @@ public class SearchFeed extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.search_results);
 
 
-        lstquery = new ArrayList<Link>();
+        lstquery = new ArrayList<Entry_>();
         mAdapter = new FeedSearchResultsAdapter(lstquery);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -84,10 +88,11 @@ public class SearchFeed extends AppCompatActivity {
                 if(lstfeeds==null) {
                     lstfeeds = new ArrayList<String>();
                 }
-                    lstfeeds.add(lstquery.get(position).getHref());
+                //show dialog to edit the title
+                    lstfeeds.add(lstquery.get(position).getUrl());
                     Channel ch = new Channel();
                     ch.Title = lstquery.get(position).getTitle();
-                    ch.url = lstquery.get(position).getHref();
+                    ch.url = lstquery.get(position).getUrl();
                     feedService.AddOrUpdateFeed(ch);
                     feedService.AddFeedToPreference("prefkey", lstfeeds);
                 startActivity(new Intent(SearchFeed.this, Feeds.class));
@@ -108,19 +113,21 @@ public class SearchFeed extends AppCompatActivity {
                             public void call(Object event) {
                                 if (event instanceof RxBus.RxEvent) {
                                     Object obj = ((RxBus.RxEvent) event).getObj();
-                                    if(obj instanceof Query) {
-                                        Query q = (Query)obj;
+                                    if(obj instanceof ResponseData) {
+                                        ResponseData q = (ResponseData)obj;
                                         if (q != null) {
                                             try {
                                                 txtProgress.setVisibility(View.GONE);
                                                 List<String> lstfeeds = feedService.GetFeedFromPreference("prefkey");
-                                                String strlnk = q.getResults().getLink();
-                                                ObjectMapper mapper = new ObjectMapper()
-                                                        .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
-                                                List<Link> lstlnk = mapper.readValue(strlnk, new TypeReference<List<Link>>() {
-                                                });
-                                                for (Link lnk : lstlnk) {
-                                                    if (lstfeeds != null && lstfeeds.contains(lnk.getHref())) {
+//                                                String strlnk = q. getResults().getLink();
+//                                                ObjectMapper mapper = new ObjectMapper()
+//                                                        .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+//                                                List<Link> lstlnk = mapper.readValue(strlnk, new TypeReference<List<Link>>() {
+//                                                });
+                                                lstquery.clear();
+                                                List<Entry_> lstlnk = q.getEntries();
+                                                for (Entry_ lnk : lstlnk) {
+                                                    if (lstfeeds != null && lstfeeds.contains(lnk.getUrl())) {
                                                         lnk.setAdded(true);
                                                     } else {
                                                         lnk.setAdded(false);

@@ -12,7 +12,7 @@ import retrofit.RxJavaCallAdapterFactory;
  */
 
 public class ApiClient {
-    public static <T> T createRetrofitService(final Class<T> clazz) {
+    public static <T> T createRetrofitService(final Class<T> clazz, String baseUrl) {
 
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -20,7 +20,7 @@ public class ApiClient {
         httpClient.interceptors().add(logging);
 
         Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://query.yahooapis.com")
+                    .baseUrl(baseUrl)
                     .client(httpClient)
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .addConverterFactory(JacksonConverterFactory.create())
